@@ -1,85 +1,98 @@
 # 🔐 NextJS Authentication System
 
-A production-ready full-stack authentication system built with **Next.js**, **MongoDB Atlas**, **JWT**, and **Gmail SMTP**.
+A modern, production-ready authentication system built with **Next.js**, **TypeScript**, **MongoDB Atlas**, **JWT**, and **Gmail SMTP**. It provides secure user authentication with email verification, password recovery, protected routes, and a responsive user interface.
+
+---
 
 ## 🌐 Live Demo
 
-👉 https://25-full-stack-authentication-system.vercel.app
+🚀 **Live Website:**  
+https://25-full-stack-authentication-system.vercel.app
 
-## 📂 GitHub Repository
-
-👉 https://github.com/Vinayak-123-jpj/25-full-stack-authentication-systems
-
----
-
-## ✨ Features
-
-- User Registration
-- Secure Login & Logout
-- JWT Authentication
-- Email Verification
-- Forgot Password
-- Reset Password
-- Protected Dashboard
-- User Profile
-- MongoDB Atlas Database
-- Responsive UI
+📂 **GitHub Repository:**  
+https://github.com/Vinayak-123-jpj/25-full-stack-authentication-systems
 
 ---
 
-## 🛠️ Tech Stack
+# ✨ Features
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Node.js
-- MongoDB Atlas
-- JWT
-- Gmail SMTP
-- Vercel
-
----
-
-## 📸 Screenshots
-
-### Login
-<img src="./nextjs.png" width="800"/>
-
-### Dashboard
-<img src="./explainer-diagram.png" width="800"/>
+- 🔐 Secure User Registration
+- 📧 Email Verification
+- 🔑 JWT Authentication
+- 🔒 Protected Routes
+- 👤 User Dashboard
+- 🔄 Forgot Password
+- ♻️ Reset Password
+- 🚪 Secure Logout
+- 🍪 HTTP-Only Cookie Authentication
+- ☁️ MongoDB Atlas Integration
+- 📱 Fully Responsive Design
 
 ---
 
-## 🚀 Run Locally
+# 🛠️ Tech Stack
 
-Clone the project
+| Category | Technologies |
+|----------|--------------|
+| Frontend | Next.js, React, TypeScript |
+| Styling | Tailwind CSS |
+| Backend | Next.js API Routes |
+| Database | MongoDB Atlas |
+| Authentication | JWT |
+| Email Service | Gmail SMTP (Nodemailer) |
+| Deployment | Vercel |
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Vinayak-123-jpj/25-full-stack-authentication-systems.git
 ```
 
-Go to the project folder
+## 2. Navigate to the Project
 
 ```bash
 cd 25-full-stack-authentication-systems
 ```
 
-Install dependencies
+## 3. Install Dependencies
 
 ```bash
 npm install
 ```
 
-Create a `.env` file and add your environment variables.
+## 4. Configure Environment Variables
 
-Run the project
+Create a `.env` file in the root directory.
+
+```env
+MONGO_URI=
+
+TOKEN_SECRET=
+
+DOMAIN=http://localhost:3000
+
+MAIL_HOST=smtp.gmail.com
+
+MAIL_PORT=587
+
+MAIL_USER=
+
+MAIL_PASS=
+```
+
+---
+
+## 5. Run the Development Server
 
 ```bash
 npm run dev
 ```
 
-Open
+Open your browser and visit:
 
 ```
 http://localhost:3000
@@ -87,42 +100,106 @@ http://localhost:3000
 
 ---
 
-## 🔑 Environment Variables
+# 🔄 Authentication Flow
 
-Create a `.env` file and add:
-
-```env
-MONGO_URI=
-TOKEN_SECRET=
-DOMAIN=
-MAIL_HOST=
-MAIL_PORT=
-MAIL_USER=
-MAIL_PASS=
+```
+User Registration
+        │
+        ▼
+Email Verification
+        │
+        ▼
+User Login
+        │
+        ▼
+Protected Dashboard
+        │
+        ▼
+Forgot Password
+        │
+        ▼
+Reset Password
+        │
+        ▼
+Login with New Password
+        │
+        ▼
+Logout
 ```
 
 ---
 
-## 📌 Authentication Flow
+# 📁 Project Structure
 
-- Sign Up
-- Verify Email
-- Login
-- Access Protected Dashboard
-- Forgot Password
-- Reset Password
-- Logout
+```
+src/
+ ├── app/
+ ├── components/
+ ├── lib/
+ ├── models/
+ ├── utils/
+ └── middleware/
+
+public/
+
+README.md
+package.json
+```
 
 ---
 
-## 👨‍💻 Author
+# 📌 Key Highlights
+
+- Production-ready authentication system
+- JWT-based authentication
+- Secure password hashing
+- Email verification workflow
+- Password reset via email
+- Protected API routes
+- MongoDB Atlas cloud database
+- Deployed on Vercel
+- Responsive and modern UI
+
+---
+
+# 💡 Future Improvements
+
+- Google Authentication
+- GitHub OAuth
+- Two-Factor Authentication (2FA)
+- User Roles (Admin/User)
+- Profile Image Upload
+- Account Settings Page
+- Login Activity History
+
+---
+
+# 👨‍💻 Author
 
 **Vinayak Dhyani**
 
-GitHub: https://github.com/Vinayak-123-jpj
+🎓 B.Tech CSE Student
 
-LinkedIn: https://www.linkedin.com/in/vinayak-dhyani-18b547373/
+### Connect with me
+
+**GitHub**
+
+https://github.com/Vinayak-123-jpj
+
+**LinkedIn**
+
+https://www.linkedin.com/in/vinayak-dhyani-18b547373/
 
 ---
 
-⭐ If you found this project useful, consider giving it a star.
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ on GitHub.
+
+It really helps and motivates me to build more projects.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
