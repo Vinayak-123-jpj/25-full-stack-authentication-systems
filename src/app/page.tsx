@@ -9,7 +9,7 @@ interface UserProfileData {
     _id: string;
     username: string;
     email: string;
-    isVerfied: boolean;
+    isVerified: boolean;
     isAdmin: boolean;
 }
 

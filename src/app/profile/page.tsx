@@ -9,7 +9,7 @@ interface UserProfileData {
     _id: string;
     username: string;
     email: string;
-    isVerfied: boolean;
+    isVerified: boolean;
     isAdmin: boolean;
 }
 
@@ -81,7 +81,7 @@ export default function ProfilePage() {
                 ) : user ? (
                     <div className="space-y-6">
                         {/* Verification notice if not verified */}
-                        {!user.isVerfied && (
+                        {!user.isVerified && (
                             <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-start gap-3">
                                 <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -117,7 +117,7 @@ export default function ProfilePage() {
                             <div className="p-5 rounded-xl bg-slate-950 border border-slate-800">
                                 <span className="text-xs font-semibold text-slate-500 block mb-1 uppercase tracking-wider">Account Status</span>
                                 <span className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                    {user.isVerfied ? (
+                                    {user.isVerified ? (
                                         <span className="px-2 py-1 text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-md">Verified</span>
                                     ) : (
                                         <span className="px-2 py-1 text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-md">Unverified</span>
