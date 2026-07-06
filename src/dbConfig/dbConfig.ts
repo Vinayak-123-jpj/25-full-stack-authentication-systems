@@ -3,24 +3,26 @@ import mongoose from 'mongoose';
 // Global cached connection for Vercel serverless + MongoDB Atlas
 // Prevents connection exhaustion across warm lambda invocations
 
-const MONGO_URI = process.env.MONGO_URI!;
-
-if (!MONGO_URI) {
-  throw new Error('Please define the MONGO_URI environment variable');
-}
-
 // Use a global var so the connection is cached between hot reloads in dev
 // and between invocations in the same Vercel lambda instance
-let cached: {
+type MongoCache = {
   conn: mongoose.Connection | null;
   promise: Promise<mongoose.Connection> | null;
-} = (global as any)._mongooseCache;
+};
+
+let cached: MongoCache = (global as any)._mongooseCache;
 
 if (!cached) {
   cached = (global as any)._mongooseCache = { conn: null, promise: null };
 }
 
 export async function connect() {
+  const MONGO_URI = process.env.MONGO_URI;
+
+  if (!MONGO_URI) {
+    throw new Error('MONGO_URI environment variable is not defined');
+  }
+
   // Return existing connection if it's open
   if (cached.conn && cached.conn.readyState === 1) {
     return cached.conn;
