@@ -1,27 +1,53 @@
 import mongoose from 'mongoose';
 
-// Singleton pattern — prevent multiple connections in Next.js dev mode due to hot reload
-let isConnected = false;
+// Proper cached connection for Vercel serverless + MongoDB Atlas
+// Each serverless invocation may reuse a warm connection or create a new one
+declare global {
+  // eslint-disable-next-line no-var
+  var mongoose: {
+    conn: typeof import('mongoose') | null;
+    promise: Promise<typeof import('mongoose')> | null;
+  };
+}
+
+const MONGO_URI = process.env.MONGO_URI!;
+
+if (!MONGO_URI) {
+  throw new Error('Please define the MONGO_URI environment variable');
+}
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 export async function connect() {
-    if (isConnected) {
-        return;
-    }
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-    try {
-        const db = await mongoose.connect(process.env.MONGO_URI!);
-        isConnected = db.connections[0].readyState === 1;
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    };
 
-        mongoose.connection.on('connected', () => {
-            console.log('MongoDB connected successfully');
-        })
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
+      console.log('[MongoDB] Connected to Atlas successfully');
+      return mongoose;
+    });
+  }
 
-        mongoose.connection.on('error', (err) => {
-            console.error('MongoDB connection error:', err);
-        })
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    console.error('[MongoDB] Connection failed:', e);
+    throw e;
+  }
 
-    } catch (error) {
-        console.error('Failed to connect to MongoDB:', error);
-        throw error;
-    }
+  return cached.conn;
 }
