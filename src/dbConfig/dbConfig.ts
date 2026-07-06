@@ -1,14 +1,7 @@
 import mongoose from 'mongoose';
 
-// Proper cached connection for Vercel serverless + MongoDB Atlas
-// Each serverless invocation may reuse a warm connection or create a new one
-declare global {
-  // eslint-disable-next-line no-var
-  var mongoose: {
-    conn: typeof import('mongoose') | null;
-    promise: Promise<typeof import('mongoose')> | null;
-  };
-}
+// Global cached connection for Vercel serverless + MongoDB Atlas
+// Prevents connection exhaustion across warm lambda invocations
 
 const MONGO_URI = process.env.MONGO_URI!;
 
@@ -16,38 +9,41 @@ if (!MONGO_URI) {
   throw new Error('Please define the MONGO_URI environment variable');
 }
 
-let cached = global.mongoose;
+// Use a global var so the connection is cached between hot reloads in dev
+// and between invocations in the same Vercel lambda instance
+let cached: {
+  conn: mongoose.Connection | null;
+  promise: Promise<mongoose.Connection> | null;
+} = (global as any)._mongooseCache;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = (global as any)._mongooseCache = { conn: null, promise: null };
 }
 
 export async function connect() {
-  if (cached.conn) {
+  // Return existing connection if it's open
+  if (cached.conn && cached.conn.readyState === 1) {
     return cached.conn;
   }
 
+  // Reuse pending connection promise
   if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
+    const opts: mongoose.ConnectOptions = {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
     };
 
-    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((m) => {
       console.log('[MongoDB] Connected to Atlas successfully');
-      return mongoose;
+      return m.connection;
+    }).catch((err) => {
+      cached.promise = null;
+      console.error('[MongoDB] Connection failed:', err);
+      throw err;
     });
   }
 
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    console.error('[MongoDB] Connection failed:', e);
-    throw e;
-  }
-
+  cached.conn = await cached.promise;
   return cached.conn;
 }
